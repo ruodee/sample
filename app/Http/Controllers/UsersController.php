@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use  Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\User;
@@ -15,7 +15,7 @@ class UsersController extends Controller
     public function show(User $user){
       return view('users.show',compact('user'));
     }
-    //接收POST过来的用户表单
+    //接收POST过来的用户表单数据
     public function store(Request $request)
     {
       $this->validate($request,[
@@ -27,11 +27,16 @@ class UsersController extends Controller
       $user = User::create([
         'name'=>$request->name,
         'email'=>$request->email,
-        'password'=>$request->password
+        'password'=>bcrypt($request->password)
       ]);
+      //注册完成后自动登录新注册用户
+      Auth::login($user);
       //消息(将消息加入到session中，flash是闪存，只仅下次访问生效，访问后立即删除)
       session()->flash('success',"注册成功！开始您的非凡之旅吧~");
+      session()->flash('danger',"你的痛苦就是我的快乐~");
+
       //开启重定向，并将数据绑定到路由
       return redirect()->route('users.show',[$user]);
     }
+    
 }
