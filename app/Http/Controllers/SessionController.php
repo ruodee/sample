@@ -19,7 +19,7 @@ public function store(Request $request){
   if(Auth::attempt($credentials,$request->has('remember')))
   {
     session()->flash('success','登录成功，欢迎进入！');
-    return redirect()->route('users.show',[Auth::user()]);
+    return redirect()->intended(route('users.show',[Auth::user()]));
   }
     else {
       session()->flash('danger','用户名不存在或密码错误！');
@@ -31,5 +31,9 @@ public function destroy(){
   Auth::logout();
   session()->flash('success','退出成功，欢迎再次登录！');
   return redirect('login');
+}
+//设置过滤机制
+public function __construct(){
+  $this->middleware('guest',['only'=>'create']);
 }
 }

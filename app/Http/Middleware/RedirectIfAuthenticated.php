@@ -18,7 +18,8 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+          session()->flash('warning','已经登录了，还想弄啥类?请先退出登录再进行类是折腾！');
+            return redirect('/');
         }
 
         return $next($request);

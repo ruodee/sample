@@ -38,5 +38,45 @@ class UsersController extends Controller
       //开启重定向，并将数据绑定到路由
       return redirect()->route('users.show',[$user]);
     }
-    
+    //编辑用户信息
+    public function edit(User $user){
+      $this->authorize('update',$user);
+      return view('users.edit',compact('user'));
+    }
+  //更新用户方法
+  public function update(User $user,Request $request)
+  {
+    //验证
+    $this->validate($request,[
+      'name'=>"required|max:50",
+      'password'=>"nullable|confirmed|min:6",
+    ]);
+    //验证过后的处理部分
+    $this->authorize('update',$user);
+    $data=[];
+    $data['name']=$request->name;
+    if($request->password)
+    $data['password']=$request->password;
+    $user->update($data);
+    session()->flash('success','用户信息修改成功！');
+    return redirect()->route('users.show',$user->id);
+  }
+  //删除界面和功能
+  public function  destroy(User $user){
+    $this -> authorize('destroy',$user);
+    $user -> delete();
+    session() -> flash('success','删除用户成功！');
+    return back();
+  }
+
+  //index函数，列出所有用户
+  public function index(){
+    $users=User::paginate(4);
+    return view('users.index',compact('users'));
+  }
+  //__cunstruct()使用UserController的初始化函数，为UserController控制器增加middleware
+  public function __construct(){
+    $this->middleware('auth',['except'=>['show','create','store','index']]);
+    $this->middleware('guest',['only' => 'create']);
+  }
 }
