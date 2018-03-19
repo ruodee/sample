@@ -1,6 +1,6 @@
 <li>
   <img src="{{$user->gravatar()}}" alt="{{$user->name}}" class="gravatar">
-  <a href="{{route('users.show',$user->id)}}" class="username">{{$user->name}}</a>
+  <a href="{{route('users.show',$user->id)}}" class="username">{{$user->name}}->id:{{$user->id}}</a>
   @can('destroy',$user)
   <form class="" action="{{ route('users.destroy',$user->id) }}" method="post">
     {{ csrf_field() }}
