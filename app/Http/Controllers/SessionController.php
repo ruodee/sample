@@ -18,8 +18,17 @@ public function store(Request $request){
   ]);
   if(Auth::attempt($credentials,$request->has('remember')))
   {
+    //验证用户是否已经激活
+    if(Auth::user()->activated)
+    {
     session()->flash('success','登录成功，欢迎进入！');
     return redirect()->intended(route('users.show',[Auth::user()]));
+    }
+    else {
+      Auth::logout();
+      session()->flash('warning',"你的帐号未进行邮件激活验证，请前往注册邮箱进行激活！");
+      return redirect('/');
+    }
   }
     else {
       session()->flash('danger','用户名不存在或密码错误！');

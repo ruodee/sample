@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
         $user -> email = 'admin@admin.com';
         $user -> password = bcrypt('admin');//密码是：admin
         $user -> is_admin = true;
+        $user -> activated = true;
         $user -> save();
     }
 }
