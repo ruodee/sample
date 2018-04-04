@@ -46,13 +46,15 @@ class UsersController extends Controller
     public function sendEmailConfirmationTo($user){
       $view='emails.confirme';
       $data=compact('user');
-      $from='ruodee@126.com';
-      $name='ruodee';
+      //$from='ruodee@126.com';
+      //$name='ruodee';
       $to=$user->email;
       $subject="感谢注册sample，验证邮件已发送你邮箱，请打开邮箱查看邮件，点击链接进行验证。";
       //发送邮件，利用Mail组件
-      Mail::send('emails.confirm',$data,function($message) use ($from,$name,$to,$subject){
-        $message->from($from,$name)->to($to)->subject($subject);
+      //Mail::send('emails.confirm',$data,function($message) use ($from,$name,$to,$subject){
+      Mail::send('emails.confirm',$data,function($message) use ($to,$subject){
+        //$message->from($from,$name)->to($to)->subject($subject);
+        $message->to($to)->subject($subject);
         //第一个参数是包含邮件消息的视图名称。第二个参数是要传递给该视图的数据数组。最后是一个用来接收邮件消息实例的闭包回调，我们可以在该回调中自定义邮件消息的发送者、接收者、邮件主题等信息。
       });
     }

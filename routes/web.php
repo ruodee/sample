@@ -24,3 +24,9 @@ Route::delete('/logout','SessionController@destroy')->name('logout');
 
 //邮箱验证确认路由
 Route::get('/signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');
+
+//密码重置路由
+Route::get('password/reset','Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/request/{token}','Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset','Auth\ResetPasswordController@reset')->name('password.update');
