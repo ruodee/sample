@@ -14,7 +14,10 @@ class UsersController extends Controller
     }
     //根据ID显示用户信息
     public function show(User $user){
-      return view('users.show',compact('user'));
+      $statuses = $user->statuses()
+                      ->orderBy('created_at','desc')
+                      ->paginate(10);
+      return view('users.show',compact('user','statuses'));
     }
     //接收POST过来的用户表单数据
     public function store(Request $request)
