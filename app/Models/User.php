@@ -45,4 +45,12 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token){
       $this->notify(new ResetPassword($token));
     }
+    //定义与微博status模型的关联，因为一个用户可以有多条微博，是一对多关系，因而定义函数名为复数
+    public function statuses(){
+      return $this->hasMany(Status::class);
+    }
+    //定义一个获取用户更新动态的所有内容，并按发布时间倒序排序
+    public function feed(){
+      return $this->statuses()->orderBy('created_at','desc');
+    }
 }
