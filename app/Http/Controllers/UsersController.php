@@ -114,4 +114,16 @@ class UsersController extends Controller
     $this->middleware('auth',['except'=>['show','create','store','index','confirmEmail']]);
     $this->middleware('guest',['only' => 'create']);
   }
+  //定义显示用户关注的方法，在except之外，默认是登陆后显示，安全的
+  public function followings(User $user){
+    $users=$user->followings()->paginate(10);
+    $title="关注的人";
+    return view('users.show_follow',compact('users','title'));
+  }
+  //定义显示用户粉丝的方法，在except之外，默认是安全的
+  public function followers(User $user){
+    $users=$user->followers()->paginate(10);
+    $title="粉丝";
+    return view('users.show_follow',compact('users','title'));
+  }
 }

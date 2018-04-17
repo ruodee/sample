@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -51,6 +52,34 @@ class User extends Authenticatable
     }
     //定义一个获取用户更新动态的所有内容，并按发布时间倒序排序
     public function feed(){
-      return $this->statuses()->orderBy('created_at','desc');
+      $user_ids = Auth::user()->followings->pluck('id')->toArray();
+      array_push($user_ids,Auth::user()->id);
+      return Status::whereIn('user_id',$user_ids)->with('user')->orderBy('created_at','desc');
+    }
+    //定义粉丝的模型关联，多对多关联，自定义中间表，即获取一个用户的粉丝
+    public function followers(){
+      return $this->belongsToMany(User::class,'followers','user_id','follower_id');
+    }
+    //定义关注者的模型关联,即一个用户关注的人
+    public function followings(){
+      return $this->belongsToMany(User::class,'followers','follower_id','user_id');
+    }
+    //定义一个关注动作
+    public function follow($user_ids){
+      //如果不是数组，则变为数组
+      if(!is_array($user_ids))
+      $user_ids=compact('user_ids');
+      $this->followings()->sync($user_ids,false);
+
+    }
+    //取消关注
+    public function unfollow($user_ids){
+      if(!is_array($user_ids))
+      $user_ids=compact('user_ids');
+      $this->followings()->detach($user_ids);
+    }
+    //判断当前用户是否关注了另外一个用户
+    public function isFollowing($user_id){
+      return $this->followings->contains($user_id);
     }
 }

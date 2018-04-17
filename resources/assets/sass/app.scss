@@ -226,3 +226,49 @@ aside {
 .status_form {
   margin-top: 20px;
 }
+/*关注，用户动态信息 */
+.stats{
+  overflow: auto;
+  margin-top:0;
+  padding:0;
+  a{
+    float:left;
+    padding:0 10px;
+    text-align:center;
+    width:33%;
+    border-left:1px solid $gray-lighter;
+    color:gray;
+    &first-child{
+      padding-left: 0;
+      border:0;
+    }
+    &:hover{
+      text-decoration:none;
+      color:#337ab7;
+    }
+  }
+  strong{
+    display:block;
+    font-size:1.2em;
+    color:black;
+  }
+}
+.user_avatars{
+  overflow:auto;
+  margin-top:10px;
+  .gravatar{
+    margin:1px 1px;
+  }
+  a{
+    padding:0;
+  }
+}
+.user.follow{
+  padding:0;
+}
+/* form */
+#form_follow button{
+  margin:0 auto;
+  display:block;
+  margin-top:25px;
+}

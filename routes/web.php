@@ -32,3 +32,9 @@ Route::get('password/request/{token}','Auth\ResetPasswordController@showResetFor
 Route::post('password/reset','Auth\ResetPasswordController@reset')->name('password.update');
 //定义微博的创建、删除路由
 Route::resource('statuses','StatusesController',['only'=> ['destroy','store']]);
+//定义粉丝关注关系的显示路由
+Route::get('/users/{user}/followings','UsersController@followings')->name('users.followings');
+Route::get('/users/{user}/followers','UsersController@followers')->name('users.followers');
+//定义关注和取消关注功能的路由
+Route::post('users/followers/{user}','FollowersController@store')->name('followers.store');
+Route::delete('users/followers/{user}','FollowersController@destroy')->name('followers.destroy');
